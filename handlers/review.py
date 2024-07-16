@@ -59,7 +59,7 @@ async def process_food_rating(message: types.Message, state: FSMContext):
             keyboard=[
                 [types.KeyboardButton(text='Плохо')],
                 [types.KeyboardButton(text='Удовлетворительно')],
-                [types.KeyboardButton(text='Вкусно')]
+                [types.KeyboardButton(text='Отлично')]
             ]
         )
         await message.answer("Как оцениваете чистоту заведения", reply_markup=kb)
@@ -74,7 +74,7 @@ async def process_cleanliness_rating(message: types.Message, state: FSMContext):
 
     kb = types.ReplyKeyboardRemove()
 
-    if message.text in ('Плохо','Удовлетворительно','Вкусно'):
+    if message.text in ('Плохо','Удовлетворительно','Отлично'):
         await state.update_data(cleanliness_rating=message.text)
         await state.set_state(RestourantReview.extra_comments)
         await message.answer("Дополнительные коментарии", reply_markup=kb)

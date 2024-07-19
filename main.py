@@ -5,12 +5,14 @@ from handlers.my_info import my_info_router
 from handlers.start import start_router
 from handlers.dishes import dishes_router
 from handlers.review import review_router
+from config import db
 
 
 
 
 
 async def main():
+   db.create_tables()
    dp.include_router(start_router)
    dp.include_router(my_info_router)
    dp.include_router(recipe_router)

@@ -3,6 +3,7 @@ from aiogram import types,Router,F
 from aiogram.filters.command import Command
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
+from config import db
 
 
 class RestourantReview(StatesGroup):
@@ -31,7 +32,7 @@ async def process_name(message: types.Message, state: FSMContext):
 
 @review_router.message(RestourantReview.instagram_username)
 async def process_instagram(message: types.Message, state: FSMContext):
-    await state.update_data(inst_username=message.text)
+    await state.update_data(instagram_username=message.text)
     await message.answer("Дата вашего посещения нашего заведения")
     await state.set_state(RestourantReview.visit_date)
 
@@ -86,5 +87,8 @@ async def process_cleanliness_rating(message: types.Message, state: FSMContext):
 @review_router.message(RestourantReview.extra_comments)
 async def process_extra_comments(message: types.Message, state: FSMContext):
     await state.update_data(extra_comments=message.text)
+    data = await state.get_data()
+    db.execute('''INSERT INTO reviews (tg_id,name,instagram_username,visit_date,food_rating,cleanliness_rating,extra_comments) VALUES (?,?,?,?,?,?,?)''',
+               (message.from_user.id,data['name'],data['instagram_username'],data['visit_date'],data['food_rating'],data['cleanliness_rating'],data['extra_comments']))
     await message.answer("Спасибо за пройденный отзыв")
     await state.clear()

@@ -11,6 +11,10 @@ class Database:
         # контекстный менеджер
         with sqlite3.connect(self.path) as connect:
             connect.execute(Queries.CREATE_TABLE_REVIEWS)
+            connect.execute(Queries.CREATE_TABLE_CATEGORIES)
+            connect.execute(Queries.CREATE_TABLE_DISHES)
+            connect.execute(Queries.INSERT_INTO_CAT)
+            connect.execute(Queries.INSERT_INTO_DISHES)
             connect.commit()
 
     def execute(self, query: str, params: tuple = None):
